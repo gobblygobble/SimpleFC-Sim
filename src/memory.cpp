@@ -29,6 +29,8 @@ void Memory::Cycle() {
             // buffer 1 has completed
             if (bts2 == 0) rcv_buffer = 0;  // no pending work
             else rcv_buffer = 2;            // pending work at buffer 2
+            
+            SignalDoneReceiving(1);
         }
     }
     else if (rcv_buffer == 2) {
@@ -37,6 +39,8 @@ void Memory::Cycle() {
             // buffer 2 has completed
             if (bts1 == 0) rcv_buffer = 0;  // no pending work
             else rcv_buffer = 1;            // pending work at buffer 1
+            
+            SignalDoneReceiving(2);
         }
     }
     else if (rcv_buffer == 0) {
@@ -111,6 +115,15 @@ float Memory::GetBytesToSendTotal() {
 
 int Memory::GetServicingBuffer() {
     return rcv_buffer;
+}
+
+void Memory::SetBufferConnection(UnifiedBuffer *_buffer) {
+    buffer = _buffer;
+}
+
+void Memory::SignalDoneReceiving() {
+    bool pending = IsIdle() ? false : true;
+    buffer->ReceiveDoneSignal(rcv_buffer, pending);
 }
 
 void Memory::PrintStats() {

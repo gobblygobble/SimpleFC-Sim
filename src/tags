@@ -1,0 +1,66 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BUFOBJS	Makefile	/^BUFOBJS = buffer.cpp test_buffer.cpp$/;"	m
+Buffer	buffer.cpp	/^Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *_memory, UnifiedBuffer *_ub) {$/;"	f	class:Buffer
+Buffer	buffer.hpp	/^class Buffer {$/;"	c
+CC	Makefile	/^CC = g++$/;"	m
+Cycle	buffer.cpp	/^Buffer::Cycle() {$/;"	f	class:Buffer
+Cycle	buffer.cpp	/^UnifiedBuffer::Cycle() {$/;"	f	class:UnifiedBuffer
+Cycle	memory.cpp	/^void Memory::Cycle() {$/;"	f	class:Memory
+GetBandwidth	memory.cpp	/^float Memory::GetBandwidth() {$/;"	f	class:Memory
+GetBusyCycle	memory.cpp	/^int Memory::GetBusyCycle() {$/;"	f	class:Memory
+GetBytesPerCycle	memory.cpp	/^float Memory::GetBytesPerCycle() {$/;"	f	class:Memory
+GetBytesToSendBuffer1	memory.cpp	/^float Memory::GetBytesToSendBuffer1() {$/;"	f	class:Memory
+GetBytesToSendBuffer2	memory.cpp	/^float Memory::GetBytesToSendBuffer2() {$/;"	f	class:Memory
+GetBytesToSendTotal	memory.cpp	/^float Memory::GetBytesToSendTotal() {$/;"	f	class:Memory
+GetIdleCycle	memory.cpp	/^int Memory::GetIdleCycle() {$/;"	f	class:Memory
+GetServicingBuffer	memory.cpp	/^int Memory::GetServicingBuffer() {$/;"	f	class:Memory
+GetTotalCycle	memory.cpp	/^int Memory::GetTotalCycle() {$/;"	f	class:Memory
+IsIdle	memory.cpp	/^bool Memory::IsIdle() {$/;"	f	class:Memory
+MACOBJS	Makefile	/^MACOBJS = mac.cpp test_mac.cpp$/;"	m
+MEMOBJS	Makefile	/^MEMOBJS = memory.cpp test_memory.cpp$/;"	m
+Memory	memory.cpp	/^Memory::Memory(float clock, float _bw) {$/;"	f	class:Memory
+Memory	memory.hpp	/^class Memory {$/;"	c
+PrintStats	memory.cpp	/^void Memory::PrintStats() {$/;"	f	class:Memory
+ReceiveRequest	memory.cpp	/^void Memory::ReceiveRequest(int bufnum, float _bts) {$/;"	f	class:Memory
+SetBufferConnection	memory.cpp	/^void Memory::SetBufferConnection(UnifiedBuffer *_buffer) {$/;"	f	class:Memory
+SignalDoneReceiving	memory.cpp	/^void Memory::SignalDoneReceiving() {$/;"	f	class:Memory
+UnifiedBuffer	buffer.cpp	/^UnifiedBuffer::UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_memory) {$/;"	f	class:UnifiedBuffer
+UnifiedBuffer	buffer.hpp	/^class UnifiedBuffer {$/;"	c
+bpc	buffer.hpp	/^    float bpc;              \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:UnifiedBuffer
+bpc	buffer.hpp	/^    float bpc;          \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:Buffer
+bpc	memory.hpp	/^    float bpc;              \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:Memory
+bring_in	buffer.hpp	/^    bool bring_in;      \/\/ whether it is receiving data from Memory$/;"	m	class:Buffer
+bring_out	buffer.hpp	/^    bool bring_out;     \/\/ whether it is sending data to MAC$/;"	m	class:Buffer
+btr	buffer.hpp	/^    float btr;          \/\/ bytes to receive (remaining) from memory$/;"	m	class:Buffer
+bts	buffer.hpp	/^    float bts;          \/\/ bytes to send (remaining) for MAC$/;"	m	class:Buffer
+bts1	memory.hpp	/^    float bts1;             \/\/ bytes to send (remaining) for buffer1$/;"	m	class:Memory
+bts2	memory.hpp	/^    float bts2;             \/\/ bytes to send (remaining) for buffer2$/;"	m	class:Memory
+buffer	memory.hpp	/^    UnifiedBuffer *buffer;  \/\/ pointer to buffer connected to this memory, NOT connected in constructor!$/;"	m	class:Memory
+buffer1	buffer.hpp	/^    Buffer *buffer1;        \/\/ pointer to first buffer$/;"	m	class:UnifiedBuffer
+buffer2	buffer.hpp	/^    Buffer *buffer2;        \/\/ pointer to second buffer$/;"	m	class:UnifiedBuffer
+buffer_index	buffer.hpp	/^    int buffer_index;   \/\/ index of buffer - 1 or 2$/;"	m	class:Buffer
+busy_cycle	buffer.hpp	/^    int busy_cycle;         \/\/ number of cycles that either one of the two buffers were busy (sending)$/;"	m	class:UnifiedBuffer
+busy_cycle	buffer.hpp	/^    int busy_cycle;     \/\/ number of busy cycles (sending)$/;"	m	class:Buffer
+busy_cycle	memory.hpp	/^    int busy_cycle;         \/\/ number of busy cycles$/;"	m	class:Memory
+bw	buffer.hpp	/^    float bw;               \/\/ bandwidth from buffer to MAC$/;"	m	class:UnifiedBuffer
+bw	buffer.hpp	/^    float bw;           \/\/ bandwidth from buffer to MAC$/;"	m	class:Buffer
+bw	memory.hpp	/^    float bw;               \/\/ bandwidth from memory to buffer in GB\/s$/;"	m	class:Memory
+capacity	buffer.hpp	/^    int capacity;           \/\/ total capacity of unified buffer$/;"	m	class:UnifiedBuffer
+capacity	buffer.hpp	/^    int capacity;       \/\/ size of capacity in MB$/;"	m	class:Buffer
+idle_cycle	buffer.hpp	/^    int idle_cycle;         \/\/ number of cycles that both of the buffers were idle (not sending)$/;"	m	class:UnifiedBuffer
+idle_cycle	buffer.hpp	/^    int idle_cycle;     \/\/ number of idle cycles$/;"	m	class:Buffer
+idle_cycle	memory.hpp	/^    int idle_cycle;         \/\/ number of idle cycles$/;"	m	class:Memory
+main	test_memory.cpp	/^int main(int argc, char* argv[]) {$/;"	f
+memory	buffer.hpp	/^    Memory *memory;         \/\/ pointer to memory connected to this buffer$/;"	m	class:UnifiedBuffer
+memory	buffer.hpp	/^    Memory *memory;     \/\/ pointer to memory connected to this buffer$/;"	m	class:Buffer
+pending_receive	buffer.hpp	/^    bool pending_receive;   \/\/ whether data to receive exists after the current receiving wave$/;"	m	class:UnifiedBuffer
+pending_send	buffer.hpp	/^    bool pending_send;      \/\/ whether data to send exists after the current sending wave$/;"	m	class:UnifiedBuffer
+rcv_buffer	buffer.hpp	/^    int rcv_buffer;         \/\/ index of buffer receiving data from memory$/;"	m	class:UnifiedBuffer
+rcv_buffer	memory.hpp	/^    int rcv_buffer;         \/\/ buffer being serviced atm - 0 if none.$/;"	m	class:Memory
+send_buffer	buffer.hpp	/^    int send_buffer;        \/\/ index of buffer sending data to MAC$/;"	m	class:UnifiedBuffer
+ub	buffer.hpp	/^    UnifiedBuffer *ub;  \/\/ pointer to unified buffer, which includes this buffer$/;"	m	class:Buffer
