@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #include "memory.hpp"
+#include "buffer.hpp"
 
 Memory::Memory(float clock, float _bw) {
     busy_cycle = 0;

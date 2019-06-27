@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "buffer.hpp"
+
 class Memory {
 private:
     int busy_cycle;         // number of busy cycles
