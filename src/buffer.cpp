@@ -24,6 +24,7 @@ Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *
     btr = 0;
 }
 
+// TODO: pending_receive, pending_send ?
 void Buffer::Cycle() {
     // take care of cycle
     if (IsIdle())
@@ -63,6 +64,14 @@ void Buffer::SendRequest(float _btr) {
  * Contacting with MAC should also be done at UnifiedBuffer-level. */
 void Buffer::ReceiveRequest(float _bts) {
     bring_out = true;
+}
+
+bool Buffer::IsSending() {
+    return bring_out;
+}
+
+bool Buffer::IsReceiving() {
+    return bring_in;
 }
 
 /* TODO:
@@ -119,11 +128,11 @@ void Buffer::SetBringOut(bool flag) {
 }
 
 void Buffer::NotifyChangeInReceiver(int finished_index) {
-    ub->ChangeInReceiver(int finished_index);
+    ub->ChangeInReceiver(finished_index);
 }
 
 void Buffer::NotifyChangeInSender(int finished_index) {
-    ub->ChangeInSender(int finished_index);
+    ub->ChangeInSender(finished_index);
 }
 
 void Buffer::PrintStats() {
@@ -167,7 +176,7 @@ UnifiedBuffer::UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_mem
 }
 
 void UnifiedBuffer::Cycle() {
-    if (buffer1->IsIdle() && buffer2->IsIdle())
+    if (IsIdle())
         idle_cycle++;
     else
         busy_cycle++;
@@ -205,11 +214,16 @@ void UnifiedBuffer::Cycle() {
         send_buffer = 0;
 }
 
+bool UnifiedBuffer::IsIdle() {
+    return (buffer1->IsIdle() && buffer2->IsIdle());
+}
+
 void UnifiedBuffer::HandleQueue() {
     float btr;
     if (memory->IsIdle()){
         if (!req_queue.empty()) {
-            btr = req_queue.pop()
+            btr = req_queue.front();
+            req_queue.pop();
             SendRequest(btr);
 
             if (req_queue.empty())
@@ -233,7 +247,7 @@ void UnifiedBuffer::SendRequest(float _btr) {
         req_queue.push(_btr);
 }
 
-void UnifiedBuffer::ReceieveRequest(float _bts) {
+void UnifiedBuffer::ReceiveRequest(float _bts) {
     if (!IsIdle()) {
         std::cerr << "Request should only be sent when the provider is idle!" << std::endl;
         assert(0);
@@ -340,19 +354,3 @@ void UnifiedBuffer::PrintStats() {
     buffer2->PrintStats();
 }
 
-    if (buffer_index == 1)
-        std::cout << "=========================== Buffer 1 Stats ===========================" << std::endl;
-    else
-        std::cout << "=========================== Buffer 2 Stats ===========================" << std::endl;
-    
-    std::cout << "Total busy cycles : idle cycles\t" << busy_cycle << " : " << idle_cycle << std::endl;
-    
-    std::string rcv = (bring_in) ? "receiving from memory" : "NOT receiving anything";
-    std::string send = (bring_out) ? "sending to MAC" : "NOT sending anything";
-
-    std::cout << "Currently " << rcv << " and " << send << "." << std::endl;
-    if (bring_in)
-        std::cout << "Need to receive " << btr << "B." << std::endl;
-    if (bring_out)
-        std::cout << "Need to send " << bts << "B." << std::endl;
-    std::cout << "======================================================================" << std::endl;;

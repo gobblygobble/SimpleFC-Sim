@@ -122,9 +122,10 @@ void Memory::SetBufferConnection(UnifiedBuffer *_buffer) {
     buffer = _buffer;
 }
 
-void Memory::SignalDoneReceiving() {
+void Memory::SignalDoneReceiving(int finished_index) {
+    //assert(finished_index == rcv_buffer);
     bool pending = IsIdle() ? false : true;
-    buffer->ReceiveDoneSignal(rcv_buffer, pending);
+    buffer->ReceiveDoneSignal(finished_index, pending);
 }
 
 void Memory::PrintStats() {
@@ -132,6 +133,6 @@ void Memory::PrintStats() {
     std::cout << "Total busy cycles : idle cycles\t" << busy_cycle << " : " << idle_cycle << std::endl;
     if (IsIdle()) std::cout << "Currently idle." << std::endl;
     else std::cout << "Currently servicing buffer #" << rcv_buffer << "." << std::endl;
-    std::cout << "Need to send " << bts1 + bts2 << "B (buffer 1: " << bts1 << "B, buffer 2: " << bts2 << "B." << std::endl;
+    std::cout << "Need to send " << bts1 + bts2 << "B (buffer 1: " << bts1 << "B, buffer 2: " << bts2 << "B)" << std::endl;
     std::cout << "======================================================================" << std::endl;
 }

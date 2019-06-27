@@ -2,7 +2,7 @@ all: main memtest buftest mactest
 CC = g++
 
 MEMOBJS = memory.cpp test_memory.cpp
-BUFOBJS = buffer.cpp test_buffer.cpp
+BUFOBJS = memory.cpp buffer.cpp test_buffer.cpp
 MACOBJS = mac.cpp test_mac.cpp
 
 main: main.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp

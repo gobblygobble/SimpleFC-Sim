@@ -21,19 +21,21 @@ int main(int argc, char* argv[]) {
 
     // default stat check
     mem.PrintStats();
-    ub.PritnStats();
+    ub.PrintStats();
 
     // test start
     std::cout << "Test start!" << std::endl;
     ub.SendRequest(100);
+    bool middle = false;
     while (true) {
         ub.Cycle();
         mem.Cycle();
         mem.PrintStats();
         ub.PrintStats();
-        if (ub.IsIdle() && mem.IsIdle()) {
+        if (middle && ub.IsIdle() && mem.IsIdle()) {
             break;
         }
+        middle = true;
     }
     return 0;
 }

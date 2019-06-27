@@ -1,8 +1,11 @@
 #include <iostream>
 #include <cstdlib>
-#include "memory.hpp"
+//#include "memory.hpp"
 
 #include <queue>
+
+#pragma once
+
 /*
 enum workstatus {
     NOTHING,
@@ -12,6 +15,8 @@ enum workstatus {
 };
 typedef enum workstatus workstatus;
 */
+
+class Memory;
 
 class Buffer {
 private:
@@ -32,7 +37,7 @@ private:
 
 public:
     Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *_memory, UnifiedBuffer *_ub);
-    void Cycle(bool pending_receive, bool pending_send);
+    void Cycle();
     void SendRequest(float _btr);
     void ReceiveRequest(float _bts);
     bool IsReceiving();
@@ -63,7 +68,7 @@ private:
     Memory *memory;             // pointer to memory connected to this buffer
     int rcv_buffer;             // index of buffer receiving data from memory
     int send_buffer;            // index of buffer sending data to MAC
-    queue <float> req_queue;    // queue of requests to send to memory
+    std::queue <float> req_queue;    // queue of requests to send to memory
 
     int busy_cycle;             // number of cycles that either one of the two buffers were busy (sending)
     int idle_cycle;             // number of cycles that both of the buffers were idle (not sending)
@@ -80,6 +85,7 @@ private:
 public:
     UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_memory);
     void Cycle();
+    bool IsIdle();
 
     void HandleQueue();
     void SendRequest(float _btr);

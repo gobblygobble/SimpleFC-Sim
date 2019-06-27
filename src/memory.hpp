@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "buffer.hpp"
+//#include "buffer.hpp"
+#pragma once
+class UnifiedBuffer;
 
 class Memory {
 private:
@@ -33,7 +35,7 @@ public:
     int GetServicingBuffer();
 
     void SetBufferConnection(UnifiedBuffer *_buffer);
-    void SignalDoneReceiving();
+    void SignalDoneReceiving(int finished_index);
     
     void PrintStats();
 };
