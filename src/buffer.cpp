@@ -7,6 +7,8 @@
 #include "memory.hpp"
 #include "buffer.hpp"
 
+#define DEBUG
+
 Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *_memory, UnifiedBuffer *_ub) {
     buffer_index = _buffer_index;
     memory = _memory;
@@ -26,6 +28,9 @@ Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *
 
 // TODO: pending_receive, pending_send ?
 void Buffer::Cycle() {
+#ifdef DEBUG
+    std::cout << "buffer #" << buffer_index << ": bring_in: "  << bring_in << ": , bring_out: "  << bring_out << std::endl;
+#endif
     // take care of cycle
     if (IsIdle())
         idle_cycle++;
@@ -64,6 +69,7 @@ void Buffer::SendRequest(float _btr) {
  * Contacting with MAC should also be done at UnifiedBuffer-level. */
 void Buffer::ReceiveRequest(float _bts) {
     bring_out = true;
+    bts = _bts;
 }
 
 bool Buffer::IsSending() {

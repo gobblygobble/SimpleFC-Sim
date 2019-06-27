@@ -130,9 +130,14 @@ void Memory::SignalDoneReceiving(int finished_index) {
 
 void Memory::PrintStats() {
     std::cout << "======================================================================" << std::endl;
+    std::cout << "============================= Mem Stats ==============================" << std::endl;
     std::cout << "Total busy cycles : idle cycles\t" << busy_cycle << " : " << idle_cycle << std::endl;
-    if (IsIdle()) std::cout << "Currently idle." << std::endl;
-    else std::cout << "Currently servicing buffer #" << rcv_buffer << "." << std::endl;
+    
+    if (IsIdle())
+        std::cout << "Currently idle." << std::endl;
+    else
+        std::cout << "Currently servicing buffer #" << rcv_buffer << "." << std::endl;
+    
     std::cout << "Need to send " << bts1 + bts2 << "B (buffer 1: " << bts1 << "B, buffer 2: " << bts2 << "B)" << std::endl;
     std::cout << "======================================================================" << std::endl;
 }

@@ -11,7 +11,7 @@ main: main.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp
 memtest: test_memory.cpp memory.cpp memory.hpp
 	$(CC) -o memtest $(MEMOBJS)
 
-buftest: test_buffer.cpp buffer.cpp buffer.hpp
+buftest: test_buffer.cpp buffer.cpp buffer.hpp memory.cpp memory.hpp
 	$(CC) -o buftest $(BUFOBJS)
 
 mactest: test_mac.cpp mac.cpp mac.hpp

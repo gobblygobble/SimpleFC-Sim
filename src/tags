@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BUFOBJS	Makefile	/^BUFOBJS = buffer.cpp test_buffer.cpp$/;"	m
+BUFOBJS	Makefile	/^BUFOBJS = memory.cpp buffer.cpp test_buffer.cpp$/;"	m
 Buffer	buffer.cpp	/^Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *_memory, UnifiedBuffer *_ub) {$/;"	f	class:Buffer
 Buffer	buffer.hpp	/^class Buffer {$/;"	c
 CC	Makefile	/^CC = g++$/;"	m
@@ -13,6 +13,7 @@ ChangeInSender	buffer.cpp	/^void UnifiedBuffer::ChangeInSender(int finished_inde
 Cycle	buffer.cpp	/^void Buffer::Cycle() {$/;"	f	class:Buffer
 Cycle	buffer.cpp	/^void UnifiedBuffer::Cycle() {$/;"	f	class:UnifiedBuffer
 Cycle	memory.cpp	/^void Memory::Cycle() {$/;"	f	class:Memory
+DEBUG	buffer.cpp	10;"	d	file:
 GetBandwidth	buffer.cpp	/^float Buffer::GetBandwidth() {$/;"	f	class:Buffer
 GetBandwidth	memory.cpp	/^float Memory::GetBandwidth() {$/;"	f	class:Memory
 GetBusyCycle	buffer.cpp	/^int Buffer::GetBusyCycle() {$/;"	f	class:Buffer
@@ -31,7 +32,10 @@ GetTotalCycle	buffer.cpp	/^int Buffer::GetTotalCycle() {$/;"	f	class:Buffer
 GetTotalCycle	memory.cpp	/^int Memory::GetTotalCycle() {$/;"	f	class:Memory
 HandleQueue	buffer.cpp	/^void UnifiedBuffer::HandleQueue() {$/;"	f	class:UnifiedBuffer
 IsIdle	buffer.cpp	/^bool Buffer::IsIdle() {$/;"	f	class:Buffer
+IsIdle	buffer.cpp	/^bool UnifiedBuffer::IsIdle() {$/;"	f	class:UnifiedBuffer
 IsIdle	memory.cpp	/^bool Memory::IsIdle() {$/;"	f	class:Memory
+IsReceiving	buffer.cpp	/^bool Buffer::IsReceiving() {$/;"	f	class:Buffer
+IsSending	buffer.cpp	/^bool Buffer::IsSending() {$/;"	f	class:Buffer
 MACOBJS	Makefile	/^MACOBJS = mac.cpp test_mac.cpp$/;"	m
 MEMOBJS	Makefile	/^MEMOBJS = memory.cpp test_memory.cpp$/;"	m
 Memory	memory.cpp	/^Memory::Memory(float clock, float _bw) {$/;"	f	class:Memory
@@ -41,16 +45,16 @@ NotifyChangeInSender	buffer.cpp	/^void Buffer::NotifyChangeInSender(int finished
 PrintStats	buffer.cpp	/^void Buffer::PrintStats() {$/;"	f	class:Buffer
 PrintStats	buffer.cpp	/^void UnifiedBuffer::PrintStats() {$/;"	f	class:UnifiedBuffer
 PrintStats	memory.cpp	/^void Memory::PrintStats() {$/;"	f	class:Memory
-ReceieveRequest	buffer.cpp	/^void UnifiedBuffer::ReceieveRequest(float _bts) {$/;"	f	class:UnifiedBuffer
 ReceiveDoneSignal	buffer.cpp	/^void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {$/;"	f	class:UnifiedBuffer
 ReceiveRequest	buffer.cpp	/^void Buffer::ReceiveRequest(float _bts) {$/;"	f	class:Buffer
+ReceiveRequest	buffer.cpp	/^void UnifiedBuffer::ReceiveRequest(float _bts) {$/;"	f	class:UnifiedBuffer
 ReceiveRequest	memory.cpp	/^void Memory::ReceiveRequest(int bufnum, float _bts) {$/;"	f	class:Memory
 SendRequest	buffer.cpp	/^void Buffer::SendRequest(float _btr) {$/;"	f	class:Buffer
 SendRequest	buffer.cpp	/^void UnifiedBuffer::SendRequest(float _btr) {$/;"	f	class:UnifiedBuffer
 SetBringIn	buffer.cpp	/^void Buffer::SetBringIn(bool flag) {$/;"	f	class:Buffer
 SetBringOut	buffer.cpp	/^void Buffer::SetBringOut(bool flag) {$/;"	f	class:Buffer
 SetBufferConnection	memory.cpp	/^void Memory::SetBufferConnection(UnifiedBuffer *_buffer) {$/;"	f	class:Memory
-SignalDoneReceiving	memory.cpp	/^void Memory::SignalDoneReceiving() {$/;"	f	class:Memory
+SignalDoneReceiving	memory.cpp	/^void Memory::SignalDoneReceiving(int finished_index) {$/;"	f	class:Memory
 UnifiedBuffer	buffer.cpp	/^UnifiedBuffer::UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_memory) {$/;"	f	class:UnifiedBuffer
 UnifiedBuffer	buffer.hpp	/^class UnifiedBuffer {$/;"	c
 UpdateLatestReceivedIndex	buffer.cpp	/^void UnifiedBuffer::UpdateLatestReceivedIndex(int finished_index) {$/;"	f	class:UnifiedBuffer
@@ -76,13 +80,6 @@ bw	buffer.hpp	/^    float bw;           \/\/ bandwidth from buffer to MAC$/;"	m	
 bw	memory.hpp	/^    float bw;               \/\/ bandwidth from memory to buffer in GB\/s$/;"	m	class:Memory
 capacity	buffer.hpp	/^    int capacity;               \/\/ total capacity of unified buffer$/;"	m	class:UnifiedBuffer
 capacity	buffer.hpp	/^    int capacity;       \/\/ size of capacity in MB$/;"	m	class:Buffer
-endl	buffer.cpp	/^        std::cout << "=========================== Buffer 1 Stats ===========================" << std::endl;$/;"	m	class:std	file:
-endl	buffer.cpp	/^        std::cout << "=========================== Buffer 2 Stats ===========================" << std::endl;$/;"	m	class:std	file:
-endl	buffer.cpp	/^        std::cout << "Need to receive " << btr << "B." << std::endl;$/;"	m	class:std	file:
-endl	buffer.cpp	/^        std::cout << "Need to send " << bts << "B." << std::endl;$/;"	m	class:std	file:
-endl	buffer.cpp	/^    std::cout << "======================================================================" << std::endl;;$/;"	m	class:std	file:
-endl	buffer.cpp	/^    std::cout << "Currently " << rcv << " and " << send << "." << std::endl;$/;"	m	class:std	file:
-endl	buffer.cpp	/^    std::cout << "Total busy cycles : idle cycles\\t" << busy_cycle << " : " << idle_cycle << std::endl;$/;"	m	class:std	file:
 idle_cycle	buffer.hpp	/^    int idle_cycle;             \/\/ number of cycles that both of the buffers were idle (not sending)$/;"	m	class:UnifiedBuffer
 idle_cycle	buffer.hpp	/^    int idle_cycle;     \/\/ number of idle cycles$/;"	m	class:Buffer
 idle_cycle	memory.hpp	/^    int idle_cycle;         \/\/ number of idle cycles$/;"	m	class:Memory
@@ -94,10 +91,8 @@ memory	buffer.hpp	/^    Memory *memory;             \/\/ pointer to memory conne
 memory	buffer.hpp	/^    Memory *memory;     \/\/ pointer to memory connected to this buffer$/;"	m	class:Buffer
 pending_receive	buffer.hpp	/^    bool pending_receive;       \/\/ whether data to receive exists after the current receiving wave$/;"	m	class:UnifiedBuffer
 pending_send	buffer.hpp	/^    bool pending_send;          \/\/ whether data to send exists after the current sending wave$/;"	m	class:UnifiedBuffer
-rcv	buffer.cpp	/^    std::string rcv = (bring_in) ? "receiving from memory" : "NOT receiving anything";$/;"	v
 rcv_buffer	buffer.hpp	/^    int rcv_buffer;             \/\/ index of buffer receiving data from memory$/;"	m	class:UnifiedBuffer
 rcv_buffer	memory.hpp	/^    int rcv_buffer;         \/\/ buffer being serviced atm - 0 if none.$/;"	m	class:Memory
-req_queue	buffer.hpp	/^    queue <float> req_queue;    \/\/ queue of requests to send to memory$/;"	m	class:UnifiedBuffer
-send	buffer.cpp	/^    std::string send = (bring_out) ? "sending to MAC" : "NOT sending anything";$/;"	v
+req_queue	buffer.hpp	/^    std::queue <float> req_queue;    \/\/ queue of requests to send to memory$/;"	m	class:UnifiedBuffer
 send_buffer	buffer.hpp	/^    int send_buffer;            \/\/ index of buffer sending data to MAC$/;"	m	class:UnifiedBuffer
 ub	buffer.hpp	/^    UnifiedBuffer *ub;  \/\/ pointer to unified buffer, which includes this buffer$/;"	m	class:Buffer

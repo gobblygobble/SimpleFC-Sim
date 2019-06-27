@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
     mem.SetBufferConnection(ub_p);
 
     // default stat check
-    mem.PrintStats();
-    ub.PrintStats();
+    //mem.PrintStats();
+    //ub.PrintStats();
 
     // test start
     std::cout << "Test start!" << std::endl;
