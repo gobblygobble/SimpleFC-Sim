@@ -19,6 +19,9 @@ Memory::Memory(float clock, float _bw) {
 }
 
 void Memory::Cycle() {
+#ifdef DEBUG
+    std::cout << "Memory::Cycle() start." << std::endl;
+#endif
     // take care of cycle
     if (IsIdle()) {
         idle_cycle++;
@@ -55,7 +58,9 @@ void Memory::Cycle() {
         assert(0);
     }
     busy_cycle++;
-    // TODO: what else should go here?
+#ifdef DEBUG
+    std::cout << "Memory::Cycle() finished." << std::endl;
+#endif
 }
 
 void Memory::ReceiveRequest(int bufnum, float _bts) {
@@ -129,9 +134,22 @@ void Memory::SetBufferConnection(UnifiedBuffer *_buffer) {
 }
 
 void Memory::SignalDoneReceiving(int finished_index) {
+#ifdef DEBUG
+    std::cout << "Memory::SignalDoneReceiving() start." << std::endl;
+#endif
+
     //assert(finished_index == rcv_buffer);
     bool pending = IsIdle() ? false : true;
+
+#ifdef DEBUG
+    std::cout << "There is " << ((pending) ? "a "  : "no ") << "pending send." << std::endl;
+#endif
+
     buffer->ReceiveDoneSignal(finished_index, pending);
+
+#ifdef DEBUG
+    std::cout << "Memory::SignalDoneReceiving() finished." << std::endl;
+#endif
 }
 
 void Memory::PrintStats() {

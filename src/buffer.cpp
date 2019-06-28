@@ -29,7 +29,8 @@ Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *
 // TODO: pending_receive, pending_send ?
 void Buffer::Cycle() {
 #ifdef DEBUG
-    std::cout << "buffer #" << buffer_index << ": bring_in: "  << bring_in << ": , bring_out: "  << bring_out << std::endl;
+    std::cout << "buffer #" << buffer_index << ": Buffer::Cycle() start." << std::endl;
+    std::cout << "bring_in: " << bring_in << ": , bring_out: " << bring_out << std::endl;
 #endif
     // take care of cycle
     if (IsIdle())
@@ -190,6 +191,9 @@ UnifiedBuffer::UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_mem
 }
 
 void UnifiedBuffer::Cycle() {
+#ifdef DEBUG
+    std::cout << "UnifiedBuffer::Cycle() start." << std::endl;
+#endif
     if (IsIdle())
         idle_cycle++;
     else
@@ -226,6 +230,9 @@ void UnifiedBuffer::Cycle() {
         send_buffer = 2;
     else
         send_buffer = 0;
+#ifdef DEBUG
+    std::cout << "UnifiedBuffer::Cycle() finished." << std::endl;
+#endif
 }
 
 bool UnifiedBuffer::IsIdle() {
@@ -278,6 +285,9 @@ void UnifiedBuffer::ReceiveRequest(float _bts) {
 
 // TODO: this function may need to be changed
 void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {
+#ifdef DEBUG
+    std::cout << "UnifiedBuffer::ReceiveDoneSignal() start." << std::endl;
+#endif
     UpdateLatestReceivedIndex(rcv_buffer_index);
     if (pending) {
         // memory has more to send
@@ -290,9 +300,15 @@ void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {
         rcv_buffer = 0;
         pending_receive = false;
     }
+#ifdef DEBUG
+    std::cout << "UnifiedBuffer::ReceiveDoneSignal() finished." << std::endl;
+#endif
 }
 
 void UnifiedBuffer::UpdateLatestReceivedIndex(int finished_index) {
+#ifdef DEBUG
+    std::cout << "finished_index, latest_rcv_index: " << finished_index << ", " << latest_rcv_index<< std::endl;
+#endif
     // correctness check
     assert(finished_index != latest_rcv_index);
     latest_rcv_index = finished_index;
@@ -325,7 +341,8 @@ void UnifiedBuffer::ChangeInReceiver(int finished_index) {
         // change index of UnifiedBuffer class
         rcv_buffer = 0;
     }
-    UpdateLatestReceivedIndex(finished_index);
+    // This will be called later from the memory's side.
+    // UpdateLatestReceivedIndex(finished_index);
 }
 
 void UnifiedBuffer::ChangeInSender(int finished_index) {
