@@ -393,3 +393,6 @@ void UnifiedBuffer::PrintStats() {
     buffer2->PrintStats();
 }
 
+void UnifiedBuffer::SetMacConnection(Mac *_mac) {
+    mac = _mac;
+}

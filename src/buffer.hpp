@@ -6,17 +6,8 @@
 
 #pragma once
 
-/*
-enum workstatus {
-    NOTHING,
-    SEND_AND_RCV,
-    SEND,
-    RCV,
-};
-typedef enum workstatus workstatus;
-*/
-
 class Memory;
+class Mac;
 
 class Buffer {
 private:
@@ -66,6 +57,8 @@ private:
     Buffer *buffer1;                // pointer to first buffer
     Buffer *buffer2;                // pointer to second buffer
     Memory *memory;                 // pointer to memory connected to this buffer
+    Mac *mac;                       // pointer to macconnected to this buffer
+
     int rcv_buffer;                 // index of buffer receiving data from memory
     int send_buffer;                // index of buffer sending data to MAC
     std::queue <float> req_queue;   // queue of requests to send to memory
@@ -103,4 +96,7 @@ public:
     void PrintStats();
 
     Memory *GetMemoryPointer(){return memory;}
+    Mac *GetMacPointer() {return mac;}
+
+    void SetMacConnection(Mac *_mac);
 };
