@@ -63,29 +63,31 @@ public:
 
 class UnifiedBuffer {
 private:
-    Buffer *buffer1;            // pointer to first buffer
-    Buffer *buffer2;            // pointer to second buffer
-    Memory *memory;             // pointer to memory connected to this buffer
-    int rcv_buffer;             // index of buffer receiving data from memory
-    int send_buffer;            // index of buffer sending data to MAC
-    std::queue <float> req_queue;    // queue of requests to send to memory
+    Buffer *buffer1;                // pointer to first buffer
+    Buffer *buffer2;                // pointer to second buffer
+    Memory *memory;                 // pointer to memory connected to this buffer
+    int rcv_buffer;                 // index of buffer receiving data from memory
+    int send_buffer;                // index of buffer sending data to MAC
+    std::queue <float> req_queue;   // queue of requests to send to memory
 
-    int busy_cycle;             // number of cycles that either one of the two buffers were busy (sending)
-    int idle_cycle;             // number of cycles that both of the buffers were idle (not sending)
-    float bw;                   // bandwidth from buffer to MAC
-    float bpc;                  // bytes per clock, bw/clock(frequency)
-    int capacity;               // total capacity of unified buffer
+    int busy_cycle;                 // number of cycles that either one of the two buffers were busy (sending)
+    int idle_cycle;                 // number of cycles that both of the buffers were idle (not sending)
+    float bw;                       // bandwidth from buffer to MAC
+    float bpc;                      // bytes per clock, bw/clock(frequency)
+    int capacity;                   // total capacity of unified buffer
 
-    bool pending_receive;       // whether data to receive exists after the current receiving wave
-    bool pending_send;          // whether data to send exists after the current sending wave
+    bool pending_receive;           // whether data to receive exists after the current receiving wave
+    bool pending_send;              // whether data to send exists after the current sending wave
 
-    int latest_rcv_index;       // index of buffer that has finished receiving latest
-    int latest_send_index;      // index of buffer that has finished sending latest
+    int latest_rcv_index;           // index of buffer that has finished receiving latest
+    int latest_send_index;          // index of buffer that has finished sending latest
 
 public:
     UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_memory);
     void Cycle();
-    bool IsIdle();
+    bool IsIdle();                  // returns true if it is not sending out anything
+    bool IsNotReceiving();          // returns true if it is not receiving anything and does not plan on receiving
+    bool DoingAbsolutelyNothing();  // returns true if it is doing absolutely nothing
 
     void HandleQueue();
     void SendRequest(float _btr);

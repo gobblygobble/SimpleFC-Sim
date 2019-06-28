@@ -39,17 +39,25 @@ int main(int argc, char* argv[]) {
     std::cout << "Test start!" << std::endl;
     std::cout << "Request: " << std::endl;
     ub_p->SendRequest(100);
-    //bool middle = false;
     //ub_p->GetMemoryPointer()->PrintStats();
     mem_p->PrintStats();
     std::cout << "Cycle start!" << std::endl;
+    int while_loop_counter = 0;
     while (true) {
         ub_p->Cycle();
         mem_p->Cycle();
         mem_p->PrintStats();
         ub_p->PrintStats();
-        //if (middle && ub_p->IsIdle() && mem_p->IsIdle()) {
-        if (ub_p->IsIdle() && mem_p->IsIdle()) {
+
+        // more requests
+        while_loop_counter++;
+        if ((while_loop_counter % 5 == 1) && (while_loop_counter < 100)) {
+            std::cout << "Adding more requests to UnifiedBuffer!" << std::endl;
+            ub_p->SendRequest(100);
+        }
+        // more requests end
+        
+        if (ub_p->DoingAbsolutelyNothing() && mem_p->IsIdle()) {
             break;
         }
         //middle = true;

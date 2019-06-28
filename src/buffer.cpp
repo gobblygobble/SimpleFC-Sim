@@ -239,6 +239,14 @@ bool UnifiedBuffer::IsIdle() {
     return (buffer1->IsIdle() && buffer2->IsIdle());
 }
 
+bool UnifiedBuffer::IsNotReceiving() {
+    return (!(buffer1->IsReceiving()) && !(buffer2->IsReceiving()) && (req_queue.empty()));
+}
+
+bool UnifiedBuffer::DoingAbsolutelyNothing() {
+    return (IsIdle() && IsNotReceiving());
+}
+
 void UnifiedBuffer::HandleQueue() {
     float btr;
     if (memory->IsIdle()){

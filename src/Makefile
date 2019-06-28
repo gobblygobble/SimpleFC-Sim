@@ -18,4 +18,4 @@ mactest: test_mac.cpp mac.cpp mac.hpp
 	$(CC) -o mactest $(MACOBJS)
 
 clean:
-	rm -f *~ *.o
+	rm -f *~ *.o memtest buftest mactest main
