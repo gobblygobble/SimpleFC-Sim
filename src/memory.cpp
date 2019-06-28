@@ -5,6 +5,8 @@
 #include "memory.hpp"
 #include "buffer.hpp"
 
+#define DEBUG
+
 Memory::Memory(float clock, float _bw) {
     busy_cycle = 0;
     idle_cycle = 0;
@@ -63,6 +65,10 @@ void Memory::ReceiveRequest(int bufnum, float _bts) {
     if (bufnum == 1) {
         assert(bts1 == 0);
         bts1 = _bts;
+#ifdef DEBUG
+        std::cout << "Memory: set bts1 to " << bts1 << std::endl;
+        PrintStats();
+#endif
     }
     else if (bufnum == 2) {
         assert(bts2 == 0);

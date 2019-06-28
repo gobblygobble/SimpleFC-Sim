@@ -55,13 +55,21 @@ void Buffer::Cycle() {
             NotifyChangeInSender(buffer_index); // the other buffer needs to send data
         }
     }
+#ifdef DEBUG
+    std::cout << "buffer #" << buffer_index << " Buffer::Cycle() finished." << std::endl;
+#endif
 }
 
 /* In this function it is assumed that UnifiedBuffer::SendRequest() picks the right index of buffer
  * and calls (this) Buffer::SendRequest() on the right buffer. */
 void Buffer::SendRequest(float _btr) {
-    memory->ReceiveRequest(buffer_index, _btr);
     bring_in = true;
+    btr = _btr;
+    memory->ReceiveRequest(buffer_index, _btr);
+#ifdef DEBUG
+    std::cout << "After Buffer::SendRequest() stats:" << std::endl;
+    memory->PrintStats();
+#endif
 }
 
 /* In this function it is assumed that UnifiedBuffer::ReceiveRequest() picks the right index of buffer
@@ -241,12 +249,12 @@ void UnifiedBuffer::HandleQueue() {
 void UnifiedBuffer::SendRequest(float _btr) {
     if (memory->IsIdle()) {
         if (latest_rcv_index == 1) {
-            buffer2->SendRequest(_btr);
             rcv_buffer = 2;
+            buffer2->SendRequest(_btr);
         }
         else {
-            buffer1->SendRequest(_btr);
             rcv_buffer = 1;
+            buffer1->SendRequest(_btr);
         }
     }
     else

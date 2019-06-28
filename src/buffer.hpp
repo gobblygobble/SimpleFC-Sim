@@ -99,4 +99,6 @@ public:
     void ChangeInSender(int finished_index);
 
     void PrintStats();
+
+    Memory *GetMemoryPointer(){return memory;}
 };
