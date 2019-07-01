@@ -2,5 +2,5 @@
 clear
 clear
 make clean
-make buftest
-./buftest
+make mactest
+./mactest

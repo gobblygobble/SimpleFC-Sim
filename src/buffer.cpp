@@ -6,6 +6,7 @@
 
 #include "memory.hpp"
 #include "buffer.hpp"
+#include "mac.hpp"
 
 #define DEBUG
 

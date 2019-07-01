@@ -1,13 +1,15 @@
 #include <iostream>
 #include <cstdlib>
-//#include "memory.hpp"
-
 #include <queue>
 
 #pragma once
 
 class Memory;
+class Buffer;
+class UnifiedBuffer;
 class Mac;
+
+
 
 class Buffer {
 private:
@@ -95,8 +97,13 @@ public:
 
     void PrintStats();
 
+    float GetBytesPerCycle() {return bpc;};
+
     Memory *GetMemoryPointer(){return memory;}
+    Buffer* GetFirstBufferPointer() {return buffer1;}
+    Buffer* GetSecondBufferPointer() {return buffer2;}
     Mac *GetMacPointer() {return mac;}
+    int GetLatestSendIndex() {return latest_send_index;}
 
     void SetMacConnection(Mac *_mac);
 };
