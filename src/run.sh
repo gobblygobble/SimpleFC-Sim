@@ -2,5 +2,5 @@
 clear
 clear
 make clean
-make mactest
-./mactest
+make main
+./main

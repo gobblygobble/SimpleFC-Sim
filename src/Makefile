@@ -5,8 +5,9 @@ CFLAGS = -g
 MEMOBJS = memory.cpp test_memory.cpp
 BUFOBJS = memory.cpp buffer.cpp test_buffer.cpp
 MACOBJS = memory.cpp buffer.cpp mac.cpp test_mac.cpp
+OBJS = memory.cpp buffer.cpp mac.cpp controller.cpp main.cpp
 
-main: main.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp
+main: main.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp controller.cpp controller.hpp
 	$(CC) $(CFLAGS) -o main $(OBJS)
 
 memtest: test_memory.cpp memory.cpp memory.hpp

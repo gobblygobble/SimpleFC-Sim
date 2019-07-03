@@ -114,6 +114,7 @@ public:
     Buffer* GetSecondBufferPointer() {return buffer2;}
     Mac *GetMacPointer() {return mac;}
     int GetLatestSendIndex() {return latest_send_index;}
+    int GetCapacity() {return capacity;}
 
     void SetMacConnection(Mac *_mac);
 };
