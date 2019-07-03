@@ -8,7 +8,7 @@
 #include "buffer.hpp"
 #include "mac.hpp"
 
-#define DEBUG
+//#define DEBUG
 
 Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *_memory, UnifiedBuffer *_ub) {
     buffer_index = _buffer_index;
@@ -27,7 +27,6 @@ Buffer::Buffer(int _buffer_index, float _bw, float _bpc, int _capacity, Memory *
     btr = 0;
 }
 
-// TODO: pending_receive, pending_send ?
 void Buffer::Cycle() {
 #ifdef DEBUG
     std::cout << "buffer #" << buffer_index << ": Buffer::Cycle() start." << std::endl;
@@ -44,8 +43,6 @@ void Buffer::Cycle() {
         btr = ((btr - memory->GetBytesPerCycle()) < 0) ? 0 : (btr - memory->GetBytesPerCycle());
         if (btr == 0) {
             bring_in = false;
-            // let the unified buffer know
-            NotifyChangeInReceiver(buffer_index); // the other buffer needs to receive data
         }
     }
     // sending part
@@ -127,12 +124,16 @@ float Buffer::GetBytesToReceive() {
     return btr;
 }
 
-void Buffer::SetBringIn(bool flag) {
+void Buffer::SetBringIn(bool flag, float size) {
     if (bring_in == flag) {
         std::cerr << "Trying to change bring_in to identical value" << std::endl;
         assert(0);
     }
     bring_in = flag;
+    if (bring_in) {
+        assert(btr == 0);
+        btr = size;
+    }
 }
 
 void Buffer::SetBringOut(bool flag) {
@@ -189,6 +190,8 @@ UnifiedBuffer::UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_mem
     pending_send = false;
     latest_rcv_index = 2;   // because we want to start at 1
     latest_send_index = 2;  // because we want to start at 1
+
+    receiving_req_num = 0;
 }
 
 void UnifiedBuffer::Cycle() {
@@ -214,8 +217,6 @@ void UnifiedBuffer::Cycle() {
 
     // check queue for pending requests to send to memory
     HandleQueue();
-
-    // TODO: these two updates may be redundant...
 
     // update receiving buffer
     if (buffer1->IsReceiving())
@@ -249,55 +250,55 @@ bool UnifiedBuffer::DoingAbsolutelyNothing() {
 }
 
 void UnifiedBuffer::HandleQueue() {
-    float btr;
-    if (memory->IsIdle()){
+    req r;
+    if (memory->IsIdle()) {
         if (!req_queue.empty()) {
-            btr = req_queue.front();
+            r = req_queue.front();
             req_queue.pop();
-            SendRequest(btr);
+            SendRequest(r.size, r.order);
 
             if (req_queue.empty())
                 pending_receive = false;
         }
+        else
+            rcv_buffer = 0;
     }
 }
 
-void UnifiedBuffer::SendRequest(float _btr) {
+void UnifiedBuffer::SendRequest(float _btr, int req_number) {
     if (memory->IsIdle()) {
         if (latest_rcv_index == 1) {
             rcv_buffer = 2;
             buffer2->SendRequest(_btr);
+            receiving_req_num = req_number;
         }
         else {
             rcv_buffer = 1;
             buffer1->SendRequest(_btr);
+            receiving_req_num = req_number;
         }
     }
-    else
-        req_queue.push(_btr);
-}
-
-void UnifiedBuffer::ReceiveRequest(float _bts) {
-    if (!IsIdle()) {
-        std::cerr << "Request should only be sent when the provider is idle!" << std::endl;
-        assert(0);
-    }
-    if (latest_send_index == 1) {
-        buffer2->ReceiveRequest(_bts);
-        send_buffer = 2;
-    }
     else {
-        buffer1->ReceiveRequest(_bts);
-        send_buffer = 1;
+        req r;
+        r.size = _btr;
+        r.order = req_number;
+        req_queue.push(r);
     }
 }
 
-// TODO: this function may need to be changed
+void UnifiedBuffer::ReceiveRequest(float _bts, int req_num) {
+    req r;
+    r.size = _bts;
+    r.order = req_num;
+    req_queue.push(r);
+}
+
 void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {
 #ifdef DEBUG
     std::cout << "UnifiedBuffer::ReceiveDoneSignal() start." << std::endl;
 #endif
     UpdateLatestReceivedIndex(rcv_buffer_index);
+    ready_queue.push(receiving_req_num);
     if (pending) {
         // memory has more to send
         rcv_buffer = 3 - rcv_buffer; // 1->2, 2->1
@@ -309,6 +310,8 @@ void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {
         rcv_buffer = 0;
         pending_receive = false;
     }
+    ChangeInReceiver(rcv_buffer_index);
+
 #ifdef DEBUG
     std::cout << "UnifiedBuffer::ReceiveDoneSignal() finished." << std::endl;
 #endif
@@ -339,19 +342,7 @@ void UnifiedBuffer::ChangeInReceiver(int finished_index) {
         std::cerr << "Unexpected index of buffer that finished receiving: " << finished_index << std::endl;
         assert(0);
     }
-
-    if (pending_receive) {
-        // change index of UnifiedBuffer class and bring_in of Buffer that'll start bringing in
-        rcv_buffer = 3 - finished_index; // 2->1, 1->2
-        buffer_to_change->SetBringIn(true);
-        pending_receive = false;
-    }
-    else {
-        // change index of UnifiedBuffer class
-        rcv_buffer = 0;
-    }
-    // This will be called later from the memory's side.
-    // UpdateLatestReceivedIndex(finished_index);
+    HandleQueue();
 }
 
 void UnifiedBuffer::ChangeInSender(int finished_index) {
@@ -392,6 +383,16 @@ void UnifiedBuffer::PrintStats() {
     std::cout << "Total busy cycles : idle cycles\t" << busy_cycle << " : " << idle_cycle << std::endl;
     buffer1->PrintStats();
     buffer2->PrintStats();
+}
+
+bool UnifiedBuffer::CheckExistenceInReadyQueue(int order) {
+    assert(order >= ready_queue.front());
+    return (order == ready_queue.front());
+}
+
+void UnifiedBuffer::MacUsingChunk(int order) {
+    assert(CheckExistenceInReadyQueue(order));
+    ready_queue.pop();
 }
 
 void UnifiedBuffer::SetMacConnection(Mac *_mac) {

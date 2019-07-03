@@ -5,7 +5,7 @@
 #include "memory.hpp"
 #include "buffer.hpp"
 
-#define DEBUG
+//#define DEBUG
 
 Memory::Memory(float clock, float _bw) {
     busy_cycle = 0;

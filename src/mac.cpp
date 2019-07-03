@@ -20,13 +20,13 @@ Mac::Mac(UnifiedBuffer *_ub, int capacity) {
     bpc = _ub->GetBytesPerCycle();
     size = capacity;
     // dynamic instances
-    connected_buffer = 0;   // not receiving anything
-    latest_rcv_index = 2;   // because we want to start at 1
     btr = 0;
     // dynamic instances used for statistics
     busy_cycle = 0;
     idle_cycle = 0;
-    total_received_rounds = 0;
+    stall_cycle = 0;
+
+    req_num = 1;
 }
 
 void Mac::Cycle() {
@@ -39,69 +39,71 @@ void Mac::Cycle() {
     else
         busy_cycle++;
 
-    // receiving part
-    if (connected_buffer) {
-        assert(btr > 0); // connected_buffer should be set to 0 only when btr is 0
-        btr = ((btr - bpc) < 0) ? 0 : (btr - bpc);
-        if (btr == 0) {
-            // update
-            latest_rcv_index = connected_buffer;
-            total_received_rounds++;
-            connected_buffer = (req_queue.empty()) ? 0 : (3 - connected_buffer); // no pending: 0, pending: 1->2, 2->1
-            if (!req_queue.empty()) {
-                btr = req_queue.front();
-                req_queue.pop();
-            }
+    req r;
+
+    if (!wait_queue.empty()) {
+        r = wait_queue.front();
+        //int check_num = r.order;
+        int check_num = wait_queue.front().order;
+        
+        // if ready, start computation immediately
+        if (CheckReadiness(check_num)) {
+            wait_queue.pop();
+            SignalUsing(check_num);
+            Compute();
         }
     }
-
+    // if pending requests exist, request them all to UnifiedBuffer
+    while (!req_queue.empty()) {
+        r = req_queue.front();
+        req_queue.pop();
+        wait_queue.push(r);
+        ub->ReceiveRequest(r.size, r.order);
+    }
 #ifdef DEBUG
     std::cout << "Mac::Cycle() end." << std::endl;
 #endif
 }
 
+// TODO: change function
+bool Mac::IsComputing() {
+    return false;
+}
+
 bool Mac::IsIdle() {
-    return (connected_buffer == 0);
+    return !IsComputing();
 }
 
-void Mac::SendRequest(float _btr) {
-    if (IsIdle() && req_queue.empty()) {
-        if (latest_rcv_index == 0)
-            connected_buffer = 1;
-        else
-            connected_buffer = 3 - latest_rcv_index; // 1->2, 2->1
-        btr = _btr;
-        // make sure things are going as expected
-        assert(CheckConsistencyWithBufferIndex());
-        // signal to unified buffer.
-        ub->ReceiveRequest(_btr);
-    }
-    else {
-        req_queue.push(_btr);
-    }
+bool Mac::DoingAbsolutelyNothing() {
+    return (req_queue.empty() && wait_queue.empty());
 }
 
-/* This seems unnecessary
-void Mac::ReceiveDoneSignal(int rc_buffer_index, bool pending) {
+// TODO: change function
+void Mac::Compute() {
     return;
 }
-*/
 
-bool Mac::CheckConsistencyWithBufferIndex() {
-    return (ub->GetLatestSendIndex() == latest_rcv_index);
+void Mac::ReceiveRequest(float _btr) {
+    req r;
+    r.size = _btr;
+    r.order = req_num++;
+    req_queue.push(r);
+}
+
+bool Mac::CheckReadiness(int order) {
+    return ub->CheckExistenceInReadyQueue(order);
+}
+
+void Mac::SignalUsing(int order) {
+    ub->MacUsingChunk(order);
 }
 
 void Mac::PrintStats() {
     std::cout << "======================================================================" << std::endl;
     std::cout << "=========================== Mac Unit Stats ===========================" << std::endl;
-    if (connected_buffer == 0)
-        std::cout << "Currently not receiving from any buffer." << std::endl;
-    else
-        std::cout << "Currently receiving from buffer #" << connected_buffer << std::endl;
-
     std::cout << "Total of " << req_queue.size() << " pending requests to send to buffer." << std::endl;
+    std::cout << "Total of " << wait_queue.size() << " requests waiting to receive from buffer." << std::endl;
     std::cout << "Total busy cycles : idle cycles\t" << busy_cycle << " : " << idle_cycle << std::endl;
-    std::cout << "Has been serviced a total of " << total_received_rounds << " chunks." << std::endl;
     std::cout << "======================================================================" << std::endl;
 }
 

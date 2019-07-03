@@ -9,7 +9,11 @@ class Buffer;
 class UnifiedBuffer;
 class Mac;
 
-
+struct request {
+    int order;
+    float size;
+};
+typedef struct request req;
 
 class Buffer {
 private:
@@ -45,7 +49,7 @@ public:
     float GetBytesToSend();
     float GetBytesToReceive();
 
-    void SetBringIn(bool flag);
+    void SetBringIn(bool flag, float size);
     void SetBringOut(bool flag);
 
     void NotifyChangeInReceiver(int finished_index);
@@ -63,8 +67,10 @@ private:
 
     int rcv_buffer;                 // index of buffer receiving data from memory
     int send_buffer;                // index of buffer sending data to MAC
-    std::queue <float> req_queue;   // queue of requests to send to memory
-
+    
+    std::queue <req> req_queue;     // queue of requests to send to memory
+    std::queue <int> ready_queue; // queue of requests ready to send to MAC
+    
     int busy_cycle;                 // number of cycles that either one of the two buffers were busy (sending)
     int idle_cycle;                 // number of cycles that both of the buffers were idle (not sending)
     float bw;                       // bandwidth from buffer to MAC
@@ -78,6 +84,8 @@ private:
     int latest_send_index;          // index of buffer that has finished sending latest
 
 public:
+    int receiving_req_num;          // current number of request being serviced
+    
     UnifiedBuffer(float clock, float _bw, int _capacity, Memory *_memory);
     void Cycle();
     bool IsIdle();                  // returns true if it is not sending out anything
@@ -85,8 +93,8 @@ public:
     bool DoingAbsolutelyNothing();  // returns true if it is doing absolutely nothing
 
     void HandleQueue();
-    void SendRequest(float _btr);
-    void ReceiveRequest(float _bts);
+    void SendRequest(float _btr, int req_num);
+    void ReceiveRequest(float _bts, int req_num);
     void ReceiveDoneSignal(int rcv_buffer_index, bool pending);
 
     void UpdateLatestReceivedIndex(int finished_index);
@@ -97,8 +105,10 @@ public:
 
     void PrintStats();
 
-    float GetBytesPerCycle() {return bpc;};
+    bool CheckExistenceInReadyQueue(int order);
+    void MacUsingChunk(int order);
 
+    float GetBytesPerCycle() {return bpc;};
     Memory *GetMemoryPointer(){return memory;}
     Buffer* GetFirstBufferPointer() {return buffer1;}
     Buffer* GetSecondBufferPointer() {return buffer2;}
