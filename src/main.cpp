@@ -24,9 +24,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Test start!" << std::endl;
     // inject a matrix multiplication
-    int A = 1024;
-    int B = 1024;
-    int C = 1024;
+    int A = 2048;
+    int B = 2048;
+    int C = 2048;
     ctrl_p->MatrixMultiply(A, B, C);   // (A by B) X (B by C)
     mac_p->PrintStats();
     while(true) {

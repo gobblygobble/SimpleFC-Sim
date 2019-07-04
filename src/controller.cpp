@@ -43,16 +43,18 @@ void Controller::Tile() {
 
 void Controller::SendRequestToMac() {
     int tile_size = (a * b + b * c);
-    int tiles_in_chunk = (int)(buffer_size / tile_size);                    // number of tiles in a chunk of request
-    int whole_chunk_num = (int)(A * B * C / (a * b * c * tiles_in_chunk));  // number of whole chunks
-    //int whole_chunk_num = (int)(A * B * C / (a * b * c * tile_size));       // number of whole chunks
-    int chunk_size = tiles_in_chunk * tile_size;                            // total size of chunk of request
+    int tiles_in_chunk = (int)(buffer_size / tile_size);    // number of tiles in a chunk of request
+    long long int T = (long long int)A * (long long int)B * (long long int)C;
+    long long int s = (long long int)(a * b * c);
+    long long int t = s * (long long int)tiles_in_chunk;
+    int whole_chunk_num = (int)(T / t);                     // number of whole chunks
+    int chunk_size = tiles_in_chunk * tile_size;            // total size of chunk of request
     int comp_per_tile = 2 * a * b * c;
     // send whole chunks
     for (int i = 0; i < whole_chunk_num; i++)
         mac->ReceiveRequest(chunk_size, tile_size, comp_per_tile);
     // send remaining
-    int remaining = tile_size * (A * B * C / (a * b * c)) - chunk_size * whole_chunk_num;
+    int remaining = (int)(tile_size * (float)T / s) - chunk_size * whole_chunk_num;
     if (remaining)
         mac->ReceiveRequest(remaining, tile_size, comp_per_tile);
 }
