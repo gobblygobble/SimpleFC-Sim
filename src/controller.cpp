@@ -45,6 +45,7 @@ void Controller::SendRequestToMac() {
     int tile_size = (a * b + b * c);
     int tiles_in_chunk = (int)(buffer_size / tile_size);                    // number of tiles in a chunk of request
     int whole_chunk_num = (int)(A * B * C / (a * b * c * tiles_in_chunk));  // number of whole chunks
+    //int whole_chunk_num = (int)(A * B * C / (a * b * c * tile_size));       // number of whole chunks
     int chunk_size = tiles_in_chunk * tile_size;                            // total size of chunk of request
     int comp_per_tile = 2 * a * b * c;
     // send whole chunks

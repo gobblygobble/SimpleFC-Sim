@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Starting test..."
 echo "Starting test with GPU config"
-
 outfile="data2.csv"
+rm $outfile
 
 M=32
 for eM in {1..8}

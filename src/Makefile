@@ -24,4 +24,4 @@ mactest: test_mac.cpp mac.cpp mac.hpp buffer.cpp buffer.hpp memory.cpp memory.hp
 	$(CC) $(CFLAGS) -o mactest $(MACOBJS)
 
 clean:
-	rm -f *~ *.o memtest buftest mactest main data1 data2
+	rm -f *~ *.o memtest buftest mactest main data

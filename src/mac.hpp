@@ -30,7 +30,7 @@ private:
     std::queue <int> tile_size_queue;   // queue of respective tile sizes
     std::queue <int> op_queue;          // queue to keep track of the tile size
 
-    int operations;                     // total number of operations executed so far
+    long long int operations;           // total number of operations executed so far
     int remaining_computation;          // how much of computation left (not 2x-ed)
     int req_num;                        // index to give to the next generated request
     bool computed;                      // whether MAC has performed computation this cycle
@@ -55,7 +55,7 @@ public:
     int GetIdleCycle() {return idle_cycle;}
     int GetTotalCycle() {return busy_cycle + idle_cycle;}
     int GetPower() {return power;}
-    int GetOperations() {return operations;}
+    long long int GetOperations() {return operations;}
 
     UnifiedBuffer *GetUnifiedBufferPointer() {return ub;}
     Buffer *GetFirstBufferPointer() {return buffer1;}

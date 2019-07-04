@@ -24,7 +24,7 @@ Cycle	buffer.cpp	/^void UnifiedBuffer::Cycle() {$/;"	f	class:UnifiedBuffer
 Cycle	mac.cpp	/^void Mac::Cycle() {$/;"	f	class:Mac
 Cycle	memory.cpp	/^void Memory::Cycle() {$/;"	f	class:Memory
 DEBUG	controller.cpp	11;"	d	file:
-DEBUG	mac.cpp	10;"	d	file:
+DOBJS	Makefile	/^DOBJS = memory.cpp buffer.cpp mac.cpp controller.cpp data.cpp$/;"	m
 DoingAbsolutelyNothing	buffer.cpp	/^bool UnifiedBuffer::DoingAbsolutelyNothing() {$/;"	f	class:UnifiedBuffer
 DoingAbsolutelyNothing	mac.cpp	/^bool Mac::DoingAbsolutelyNothing() {$/;"	f	class:Mac
 GetBandwidth	buffer.cpp	/^float Buffer::GetBandwidth() {$/;"	f	class:Buffer
@@ -49,6 +49,7 @@ GetIdleCycle	memory.cpp	/^int Memory::GetIdleCycle() {$/;"	f	class:Memory
 GetLatestSendIndex	buffer.hpp	/^    int GetLatestSendIndex() {return latest_send_index;}$/;"	f	class:UnifiedBuffer
 GetMacPointer	buffer.hpp	/^    Mac *GetMacPointer() {return mac;}$/;"	f	class:UnifiedBuffer
 GetMemoryPointer	buffer.hpp	/^    Memory *GetMemoryPointer(){return memory;}$/;"	f	class:UnifiedBuffer
+GetOperations	mac.hpp	/^    long long int GetOperations() {return operations;}$/;"	f	class:Mac
 GetPower	mac.hpp	/^    int GetPower() {return power;}$/;"	f	class:Mac
 GetSecondBufferPointer	buffer.hpp	/^    Buffer* GetSecondBufferPointer() {return buffer2;}$/;"	f	class:UnifiedBuffer
 GetSecondBufferPointer	mac.hpp	/^    Buffer *GetSecondBufferPointer() {return buffer2;}$/;"	f	class:Mac
@@ -86,7 +87,7 @@ PrintStats	memory.cpp	/^void Memory::PrintStats() {$/;"	f	class:Memory
 ReceiveDoneSignal	buffer.cpp	/^void UnifiedBuffer::ReceiveDoneSignal(int rcv_buffer_index, bool pending) {$/;"	f	class:UnifiedBuffer
 ReceiveRequest	buffer.cpp	/^void Buffer::ReceiveRequest(float _bts) {$/;"	f	class:Buffer
 ReceiveRequest	buffer.cpp	/^void UnifiedBuffer::ReceiveRequest(float _bts, int req_num) {$/;"	f	class:UnifiedBuffer
-ReceiveRequest	mac.cpp	/^void Mac::ReceiveRequest(float _btr) {$/;"	f	class:Mac
+ReceiveRequest	mac.cpp	/^void Mac::ReceiveRequest(float _btr, int tile_size, int op_per_tile) {$/;"	f	class:Mac
 ReceiveRequest	memory.cpp	/^void Memory::ReceiveRequest(int bufnum, float _bts) {$/;"	f	class:Memory
 SendRequest	buffer.cpp	/^void Buffer::SendRequest(float _btr) {$/;"	f	class:Buffer
 SendRequest	buffer.cpp	/^void UnifiedBuffer::SendRequest(float _btr, int req_number) {$/;"	f	class:UnifiedBuffer
@@ -106,25 +107,25 @@ a	controller.hpp	/^    int a;$/;"	m	class:Controller
 b	controller.hpp	/^    int b;$/;"	m	class:Controller
 bpc	buffer.hpp	/^    float bpc;                      \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:UnifiedBuffer
 bpc	buffer.hpp	/^    float bpc;          \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:Buffer
-bpc	mac.hpp	/^    float bpc;                      \/\/ bytes per cycle, serviced by buffer to MAC$/;"	m	class:Mac
+bpc	mac.hpp	/^    float bpc;                          \/\/ bytes per cycle, serviced by buffer to MAC$/;"	m	class:Mac
 bpc	memory.hpp	/^    float bpc;              \/\/ bytes per clock, bw\/clock(frequency)$/;"	m	class:Memory
 bring_in	buffer.hpp	/^    bool bring_in;      \/\/ whether it is receiving data from Memory$/;"	m	class:Buffer
 bring_out	buffer.hpp	/^    bool bring_out;     \/\/ whether it is sending data to MAC$/;"	m	class:Buffer
 btr	buffer.hpp	/^    float btr;          \/\/ bytes to receive (remaining) from memory$/;"	m	class:Buffer
-btr	mac.hpp	/^    float btr;                      \/\/ number of bytes left to receive$/;"	m	class:Mac
+btr	mac.hpp	/^    float btr;                          \/\/ number of bytes left to receive$/;"	m	class:Mac
 bts	buffer.hpp	/^    float bts;          \/\/ bytes to send (remaining) for MAC$/;"	m	class:Buffer
 bts1	memory.hpp	/^    float bts1;             \/\/ bytes to send (remaining) for buffer1$/;"	m	class:Memory
 bts2	memory.hpp	/^    float bts2;             \/\/ bytes to send (remaining) for buffer2$/;"	m	class:Memory
 buffer	memory.hpp	/^    UnifiedBuffer *buffer;  \/\/ pointer to buffer connected to this memory, NOT connected in constructor!$/;"	m	class:Memory
 buffer1	buffer.hpp	/^    Buffer *buffer1;                \/\/ pointer to first buffer$/;"	m	class:UnifiedBuffer
-buffer1	mac.hpp	/^    Buffer *buffer1;                \/\/ pointer to first buffer of unified buffer$/;"	m	class:Mac
+buffer1	mac.hpp	/^    Buffer *buffer1;                    \/\/ pointer to first buffer of unified buffer$/;"	m	class:Mac
 buffer2	buffer.hpp	/^    Buffer *buffer2;                \/\/ pointer to second buffer$/;"	m	class:UnifiedBuffer
-buffer2	mac.hpp	/^    Buffer *buffer2;                \/\/ pointer to second buffer of unified buffer$/;"	m	class:Mac
+buffer2	mac.hpp	/^    Buffer *buffer2;                    \/\/ pointer to second buffer of unified buffer$/;"	m	class:Mac
 buffer_index	buffer.hpp	/^    int buffer_index;   \/\/ index of buffer - 1 or 2$/;"	m	class:Buffer
-buffer_size	controller.hpp	/^    int buffer_size;$/;"	m	class:Controller
+buffer_size	controller.hpp	/^    int buffer_size;    \/\/ Bytes$/;"	m	class:Controller
 busy_cycle	buffer.hpp	/^    int busy_cycle;                 \/\/ number of cycles that either one of the two buffers were busy (sending)$/;"	m	class:UnifiedBuffer
 busy_cycle	buffer.hpp	/^    int busy_cycle;     \/\/ number of busy cycles (sending)$/;"	m	class:Buffer
-busy_cycle	mac.hpp	/^    int busy_cycle;                 \/\/ number of cycles that MAC was serviced by any of the buffers$/;"	m	class:Mac
+busy_cycle	mac.hpp	/^    int busy_cycle;                     \/\/ number of cycles that MAC was serviced by any of the buffers$/;"	m	class:Mac
 busy_cycle	memory.hpp	/^    int busy_cycle;         \/\/ number of busy cycles$/;"	m	class:Memory
 bw	buffer.hpp	/^    float bw;                       \/\/ bandwidth from buffer to MAC$/;"	m	class:UnifiedBuffer
 bw	buffer.hpp	/^    float bw;           \/\/ bandwidth from buffer to MAC$/;"	m	class:Buffer
@@ -132,17 +133,18 @@ bw	memory.hpp	/^    float bw;               \/\/ bandwidth from memory to buffer
 c	controller.hpp	/^    int c;$/;"	m	class:Controller
 capacity	buffer.hpp	/^    int capacity;                   \/\/ total capacity of unified buffer$/;"	m	class:UnifiedBuffer
 capacity	buffer.hpp	/^    int capacity;       \/\/ size of capacity in MB$/;"	m	class:Buffer
-clock	controller.hpp	/^    float clock;$/;"	m	class:Controller
-clock	mac.hpp	/^    float clock;                    \/\/ frequency, in GHz (cycles per second)$/;"	m	class:Mac
-computed	mac.hpp	/^    bool computed;                  \/\/ whether MAC has performed computation this cycle$/;"	m	class:Mac
+clock	controller.hpp	/^    float clock;        \/\/ GHz$/;"	m	class:Controller
+clock	mac.hpp	/^    float clock;                        \/\/ frequency, in GHz (cycles per second)$/;"	m	class:Mac
+computed	mac.hpp	/^    bool computed;                      \/\/ whether MAC has performed computation this cycle$/;"	m	class:Mac
 idle_cycle	buffer.hpp	/^    int idle_cycle;                 \/\/ number of cycles that both of the buffers were idle (not sending)$/;"	m	class:UnifiedBuffer
 idle_cycle	buffer.hpp	/^    int idle_cycle;     \/\/ number of idle cycles$/;"	m	class:Buffer
-idle_cycle	mac.hpp	/^    int idle_cycle;                 \/\/ number of cycles that MAC was left unserviced$/;"	m	class:Mac
+idle_cycle	mac.hpp	/^    int idle_cycle;                     \/\/ number of cycles that MAC was left unserviced$/;"	m	class:Mac
 idle_cycle	memory.hpp	/^    int idle_cycle;         \/\/ number of idle cycles$/;"	m	class:Memory
 latest_rcv_index	buffer.hpp	/^    int latest_rcv_index;           \/\/ index of buffer that has finished receiving latest$/;"	m	class:UnifiedBuffer
 latest_send_index	buffer.hpp	/^    int latest_send_index;          \/\/ index of buffer that has finished sending latest$/;"	m	class:UnifiedBuffer
 mac	buffer.hpp	/^    Mac *mac;                       \/\/ pointer to macconnected to this buffer$/;"	m	class:UnifiedBuffer
 mac	controller.hpp	/^    Mac *mac;$/;"	m	class:Controller
+main	data.cpp	/^int main(int argc, char *argv[]) {$/;"	f
 main	main.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 main	test_buffer.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 main	test_mac.cpp	/^int main(int argc, char* argv[]) {$/;"	f
@@ -150,25 +152,28 @@ main	test_memory.cpp	/^int main(int argc, char* argv[]) {$/;"	f
 memory	buffer.hpp	/^    Memory *memory;                 \/\/ pointer to memory connected to this buffer$/;"	m	class:UnifiedBuffer
 memory	buffer.hpp	/^    Memory *memory;     \/\/ pointer to memory connected to this buffer$/;"	m	class:Buffer
 memory	controller.hpp	/^    Memory* memory;$/;"	m	class:Controller
+op_queue	mac.hpp	/^    std::queue <int> op_queue;          \/\/ queue to keep track of the tile size$/;"	m	class:Mac
+operations	mac.hpp	/^    long long int operations;           \/\/ total number of operations executed so far$/;"	m	class:Mac
 order	buffer.hpp	/^    int order;$/;"	m	struct:request
 pending_receive	buffer.hpp	/^    bool pending_receive;           \/\/ whether data to receive exists after the current receiving wave$/;"	m	class:UnifiedBuffer
 pending_send	buffer.hpp	/^    bool pending_send;              \/\/ whether data to send exists after the current sending wave$/;"	m	class:UnifiedBuffer
 power	controller.hpp	/^    int power;$/;"	m	class:Controller
-power	mac.hpp	/^    int power;                    \/\/ number of small MAC units$/;"	m	class:Mac
+power	mac.hpp	/^    int power;                          \/\/ number of small MAC units$/;"	m	class:Mac
 rcv_buffer	buffer.hpp	/^    int rcv_buffer;                 \/\/ index of buffer receiving data from memory$/;"	m	class:UnifiedBuffer
 rcv_buffer	memory.hpp	/^    int rcv_buffer;         \/\/ buffer being serviced atm - 0 if none.$/;"	m	class:Memory
 ready_queue	buffer.hpp	/^    std::queue <int> ready_queue; \/\/ queue of requests ready to send to MAC$/;"	m	class:UnifiedBuffer
 receiving_req_num	buffer.hpp	/^    int receiving_req_num;          \/\/ current number of request being serviced$/;"	m	class:UnifiedBuffer
-remaining_computation	mac.hpp	/^    int remaining_computation;      \/\/ how much of computation left (not 2x-ed)$/;"	m	class:Mac
+remaining_computation	mac.hpp	/^    int remaining_computation;          \/\/ how much of computation left (not 2x-ed)$/;"	m	class:Mac
 req	buffer.hpp	/^typedef struct request req;$/;"	t	typeref:struct:request
-req_num	mac.hpp	/^    int req_num;                    \/\/ index to give to the next generated request$/;"	m	class:Mac
+req_num	mac.hpp	/^    int req_num;                        \/\/ index to give to the next generated request$/;"	m	class:Mac
 req_queue	buffer.hpp	/^    std::queue <req> req_queue;     \/\/ queue of requests to send to memory$/;"	m	class:UnifiedBuffer
-req_queue	mac.hpp	/^    std::queue <req> req_queue;     \/\/ queue of requests to send to buffer$/;"	m	class:Mac
+req_queue	mac.hpp	/^    std::queue <req> req_queue;         \/\/ queue of requests to send to buffer$/;"	m	class:Mac
 request	buffer.hpp	/^struct request {$/;"	s
 send_buffer	buffer.hpp	/^    int send_buffer;                \/\/ index of buffer sending data to MAC$/;"	m	class:UnifiedBuffer
 size	buffer.hpp	/^    float size;$/;"	m	struct:request
-stall_cycle	mac.hpp	/^    int stall_cycle;                \/\/ number of cycles that a request was stalled$/;"	m	class:Mac
+stall_cycle	mac.hpp	/^    int stall_cycle;                    \/\/ number of cycles that a request was stalled$/;"	m	class:Mac
+tile_size_queue	mac.hpp	/^    std::queue <int> tile_size_queue;   \/\/ queue of respective tile sizes$/;"	m	class:Mac
 ub	buffer.hpp	/^    UnifiedBuffer *ub;  \/\/ pointer to unified buffer, which includes this buffer$/;"	m	class:Buffer
 ub	controller.hpp	/^    UnifiedBuffer *ub;$/;"	m	class:Controller
-ub	mac.hpp	/^    UnifiedBuffer *ub;              \/\/ pointer to unified buffer connected with this buffer$/;"	m	class:Mac
-wait_queue	mac.hpp	/^    std::queue <req> wait_queue;    \/\/ queue of requests waiting to be received$/;"	m	class:Mac
+ub	mac.hpp	/^    UnifiedBuffer *ub;                  \/\/ pointer to unified buffer connected with this buffer$/;"	m	class:Mac
+wait_queue	mac.hpp	/^    std::queue <req> wait_queue;        \/\/ queue of requests waiting to be received$/;"	m	class:Mac
