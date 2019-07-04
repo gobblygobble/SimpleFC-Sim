@@ -97,13 +97,13 @@ void Mac::Compute(int size) {
     int tile_size = tile_size_queue.front();
     int remaining_computation_before_computation = remaining_computation;
 
-    remaining_computation = ((remaining_computation - comp_power) < 0) ? 0 : (remaining_computation - tile_size);
+    remaining_computation = ((remaining_computation - tile_size) < 0) ? 0 : (remaining_computation - tile_size);
     if (remaining_computation == 0) {
         op_queue.pop();
         tile_size_queue.pop();
     }
 
-    operations += 2 * (remaining_computation_before_computation - remaining_computation) * (comp_power / tile_size);
+    operations += (remaining_computation_before_computation - remaining_computation) * (comp_power / tile_size);
     computed = true;
 }
 

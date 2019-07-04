@@ -9,10 +9,10 @@
 int main(int argc, char* argv[]) {
     // configurations
     float clock = 1;                    // 1GHz
-    float mem_to_buffer_bw = 900;        // 16GB/s
+    float mem_to_buffer_bw = 600;       // 16GB/s
     float buffer_to_mac_bw = 1000000;   // supposedly infinite bandwidth
     int ub_capacity = 60;               // 60MB (30MB for each buffer)
-    int mac_power = 8192;               // how many mac units per big MAC unit
+    int mac_power = 7500;               // how many mac units per big MAC unit
     // setting
     Memory *mem_p = new Memory(clock, mem_to_buffer_bw);
     UnifiedBuffer *ub_p = new UnifiedBuffer(clock, buffer_to_mac_bw, ub_capacity, mem_p);
@@ -24,9 +24,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Test start!" << std::endl;
     // inject a matrix multiplication
-    int A = 480;
-    int B = 480;
-    int C = 640;
+    int A = 1024;
+    int B = 1024;
+    int C = 1024;
     ctrl_p->MatrixMultiply(A, B, C);   // (A by B) X (B by C)
     mac_p->PrintStats();
     while(true) {
