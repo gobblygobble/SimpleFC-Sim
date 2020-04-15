@@ -1,4 +1,4 @@
-all: main
+all: main rundata
 CC = g++
 CFLAGS = -g
 
@@ -11,8 +11,8 @@ DOBJS = memory.cpp buffer.cpp mac.cpp controller.cpp data.cpp
 main: main.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp controller.cpp controller.hpp
 	$(CC) $(CFLAGS) -o main $(OBJS)
 
-data: data.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp controller.cpp controller.hpp
-	$(CC) $(CFLAGS) -o data $(DOBJS)
+rundata: data.cpp memory.cpp memory.hpp buffer.cpp buffer.hpp mac.cpp mac.hpp controller.cpp controller.hpp
+	$(CC) $(CFLAGS) -o rundata $(DOBJS)
 
 memtest: test_memory.cpp memory.cpp memory.hpp
 	$(CC) -o memtest $(MEMOBJS)
@@ -24,4 +24,4 @@ mactest: test_mac.cpp mac.cpp mac.hpp buffer.cpp buffer.hpp memory.cpp memory.hp
 	$(CC) $(CFLAGS) -o mactest $(MACOBJS)
 
 clean:
-	rm -f *~ *.o memtest buftest mactest main data
+	rm -f *~ *.o memtest buftest mactest main rundata

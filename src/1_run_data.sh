@@ -8,7 +8,7 @@ do
     M=128
     for eM in {1..8}
     do
-        ./data -b $B -c 1 -m $M -n $outfile -s 60 -x 480 -y 480 -z 640
+        ./rundata -b $B -c 1 -m $M -n $outfile -s 60 -x 480 -y 480 -z 640
         M=$(($M * 2))
     done
 done
